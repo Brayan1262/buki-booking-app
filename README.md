@@ -34,7 +34,7 @@ El evaluador debe tener instalado:
 - Angular CLI opcional
 - Flutter opcional solo si desea revisar mobile_flutter
 
-Aclarar:
+Nota:
 El proyecto no incluye una base de datos local. Cada evaluador debe tener MySQL instalado, configurar sus credenciales en `backend/.env` y ejecutar `npm run db:init` para crear automáticamente la base de datos y las tablas necesarias.
 
 ## Clonar repositorio
@@ -69,7 +69,7 @@ DB_PASSWORD=su_password_mysql
 DB_NAME=buki_booking_db
 ```
 
-Aclarar:
+Nota:
 El archivo `.env` real no se sube al repositorio por seguridad. Cada evaluador debe colocar su propia contraseña de MySQL.
 
 ## Crear base de datos
@@ -186,7 +186,6 @@ Por alcance de la prueba no se implementó:
 - notificaciones
 - deploy
 - edición/eliminación avanzada
-- pruebas automatizadas obligatorias
 
 ## Autor
 
@@ -194,4 +193,4 @@ Brayan Jair Chavez Oscor
 
 ## Nota final
 
-Este proyecto prioriza funcionalidad, integración, orden y facilidad de revisión, acorde al perfil practicante/junior solicitado.
+Este proyecto prioriza funcionalidad, integración, orden y facilidad de revisión.
