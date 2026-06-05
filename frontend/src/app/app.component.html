@@ -107,8 +107,8 @@
             <h6 class="card-subtitle text-muted fw-medium mb-1">Estado API</h6>
             <div class="d-flex align-items-center mt-2">
               <span class="badge px-3 py-2 rounded-pill fw-medium"
-                    [ngClass]="apiStatus === 'Conectado' ? 'bg-success bg-opacity-25 text-success' : (apiStatus === 'Desconectado' ? 'bg-danger bg-opacity-25 text-danger' : 'bg-warning bg-opacity-25 text-warning')">
-                <i class="bi me-1" [ngClass]="apiStatus === 'Conectado' ? 'bi-check-circle-fill' : (apiStatus === 'Desconectado' ? 'bi-x-circle-fill' : 'bi-hourglass-split')"></i>
+                    [ngClass]="apiOnline ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'">
+                <i class="bi me-1" [ngClass]="apiOnline ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
                 {{ apiStatus }}
               </span>
             </div>
@@ -153,11 +153,11 @@
                 <textarea class="form-control rounded-3 border-0 shadow-sm px-3 py-2" [(ngModel)]="serviceForm.description" name="description" rows="2" placeholder="Detalles del servicio..."></textarea>
               </div>
               <div class="row g-3 mb-4">
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                   <label class="form-label small fw-medium text-muted">Precio ($)</label>
                   <input type="number" class="form-control rounded-3 border-0 shadow-sm px-3 py-2" [(ngModel)]="serviceForm.price" name="price" placeholder="0.00">
                 </div>
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                   <label class="form-label small fw-medium text-muted">Duración (min)</label>
                   <input type="number" class="form-control rounded-3 border-0 shadow-sm px-3 py-2" [(ngModel)]="serviceForm.duration" name="duration" placeholder="45">
                 </div>
@@ -188,7 +188,7 @@
               <div class="card-body p-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <h6 class="mb-0 fw-bold text-buki-dark">{{ s.name }}</h6>
-                  <span class="badge bg-buki-bg text-buki-purple fs-6 rounded-pill px-3 py-1 shadow-sm">${{ s.price }}</span>
+                  <span class="badge bg-buki-bg text-buki-purple fs-6 rounded-pill px-3 py-1 shadow-sm">S/ {{ s.price | number:'1.2-2' }}</span>
                 </div>
                 <p class="text-muted small mb-3 text-truncate" [title]="s.description">{{ s.description || 'Sin descripción' }}</p>
                 <div class="d-flex align-items-center small text-secondary bg-light rounded-2 py-1 px-2 d-inline-flex">
@@ -227,11 +227,11 @@
             <h6 class="fw-bold text-buki-dark mb-3">Registrar nueva reserva</h6>
             <form (ngSubmit)="createBooking()">
               <div class="row g-3 mb-3">
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                   <label class="form-label small fw-medium text-muted">Nombre del cliente</label>
                   <input type="text" class="form-control rounded-3 border-0 shadow-sm px-3 py-2" [(ngModel)]="bookingForm.client_name" name="client_name" placeholder="Ej. María Pérez">
                 </div>
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                   <label class="form-label small fw-medium text-muted">Correo electrónico</label>
                   <input type="email" class="form-control rounded-3 border-0 shadow-sm px-3 py-2" [(ngModel)]="bookingForm.client_email" name="client_email" placeholder="maria@email.com">
                 </div>
@@ -241,16 +241,16 @@
                 <label class="form-label small fw-medium text-muted">Servicio a reservar</label>
                 <select class="form-select rounded-3 border-0 shadow-sm px-3 py-2 text-muted" [(ngModel)]="bookingForm.service_id" name="service_id">
                   <option value="" disabled selected>Seleccione un servicio...</option>
-                  <option *ngFor="let s of services" [value]="s.id">{{ s.name }} ({{ s.duration }} min - ${{ s.price }})</option>
+                  <option *ngFor="let s of services" [value]="s.id">{{ s.name }} ({{ s.duration }} min - S/ {{ s.price | number:'1.2-2' }})</option>
                 </select>
               </div>
 
               <div class="row g-3 mb-4">
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                   <label class="form-label small fw-medium text-muted">Fecha de reserva</label>
                   <input type="date" class="form-control rounded-3 border-0 shadow-sm px-3 py-2 text-muted" [(ngModel)]="bookingForm.booking_date" name="booking_date">
                 </div>
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                   <label class="form-label small fw-medium text-muted">Hora de reserva</label>
                   <input type="time" class="form-control rounded-3 border-0 shadow-sm px-3 py-2 text-muted" [(ngModel)]="bookingForm.booking_time" name="booking_time">
                 </div>
@@ -295,7 +295,7 @@
                   </div>
                   <div class="flex-grow-1">
                     <p class="mb-0 small fw-bold text-buki-dark lh-sm">{{ b.service_name }}</p>
-                    <small class="text-muted" style="font-size: 0.7rem;">${{ b.service_price }} • {{ b.service_duration }} min</small>
+                    <small class="text-muted" style="font-size: 0.7rem;">S/ {{ b.service_price | number:'1.2-2' }} • {{ b.service_duration }} min</small>
                   </div>
                 </div>
 

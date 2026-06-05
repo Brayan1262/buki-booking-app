@@ -41,7 +41,8 @@ export class AppComponent implements OnInit {
   savingBooking = false;
   
   // API Status (Para el dashboard)
-  apiStatus = 'Pendiente de conexión';
+  apiStatus = 'Pendiente';
+  apiOnline = false;
 
   constructor(private bukiApi: BukiApiService) {}
 
@@ -53,8 +54,14 @@ export class AppComponent implements OnInit {
 
   checkApiStatus() {
     this.bukiApi.getHealth().subscribe({
-      next: () => this.apiStatus = 'Conectado',
-      error: () => this.apiStatus = 'Desconectado'
+      next: () => {
+        this.apiStatus = 'Conectado';
+        this.apiOnline = true;
+      },
+      error: () => {
+        this.apiStatus = 'Sin conexión';
+        this.apiOnline = false;
+      }
     });
   }
 
