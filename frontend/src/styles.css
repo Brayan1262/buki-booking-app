@@ -3,10 +3,11 @@
 
 :root {
   --buki-bg: #F8F5FC;
-  --buki-lilac: #BBA5D6; /* Color exacto extraído de tu imagen */
-  --buki-purple: #816EAA;
-  --buki-dark: #2F2A3D;
+  --buki-lilac: #B9A7D8;
+  --buki-purple: #8F79BD;
+  --buki-dark: #5F4B8B;
   --buki-text: #2F2A3D;
+  --buki-text-secondary: #5E5873;
   --buki-white: #FFFFFF;
   --buki-success: #6FCF97;
   --buki-error: #EB5757;
@@ -24,21 +25,58 @@ body {
 .text-buki-purple { color: var(--buki-purple) !important; }
 .text-buki-lilac { color: var(--buki-lilac) !important; }
 .text-buki-dark { color: var(--buki-dark) !important; }
+.text-buki-secondary { color: var(--buki-text-secondary) !important; }
 
-.bg-buki-purple { background-color: var(--buki-purple) !important; color: white; }
-.bg-buki-dark { background-color: var(--buki-dark) !important; color: white; }
-.bg-buki-lilac { background-color: var(--buki-lilac) !important; color: white !important; }
+.bg-buki-purple { background-color: var(--buki-purple) !important; color: white !important; }
+.bg-buki-dark { background-color: var(--buki-dark) !important; color: white !important; }
+.bg-buki-lilac { background-color: var(--buki-lilac) !important; color: var(--buki-dark) !important; }
+
 .border-buki-purple { border-color: var(--buki-purple) !important; }
 .border-buki-lilac { border-color: var(--buki-lilac) !important; }
 
+/* Sombras y animaciones suaves */
 .shadow-soft {
-  box-shadow: 0 4px 12px rgba(187, 165, 214, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(95, 75, 139, 0.08) !important;
 }
 
 .shadow-hover {
-  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 .shadow-hover:hover {
-  box-shadow: 0 8px 24px rgba(187, 165, 214, 0.3) !important;
+  box-shadow: 0 10px 25px rgba(95, 75, 139, 0.15) !important;
+  transform: translateY(-3px);
+}
+
+/* Botones interactivos */
+.btn-buki {
+  background-color: var(--buki-purple);
+  color: white;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+.btn-buki:hover:not(:disabled) {
+  background-color: var(--buki-dark);
+  color: white;
   transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(95, 75, 139, 0.3);
+}
+
+/* Campos de formulario */
+.form-control, .form-select {
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(185, 167, 216, 0.4) !important;
+  color: var(--buki-text);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--buki-purple) !important;
+  box-shadow: 0 0 0 0.25rem rgba(143, 121, 189, 0.2) !important;
+  background-color: #FFFFFF;
+}
+.form-control::placeholder {
+  color: #A09BAA;
+}
+
+/* Utilidad para fondos con opacidad */
+.bg-buki-purple-light {
+  background-color: rgba(143, 121, 189, 0.1) !important;
 }
