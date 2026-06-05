@@ -1,0 +1,5 @@
+.border-dashed {
+  border-style: dashed !important;
+  border-width: 2px !important;
+  border-color: var(--buki-lilac) !important;
+}

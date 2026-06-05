@@ -1,0 +1,17 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  title = 'Buki Booking App';
+
+  ngOnInit() {
+    // Aquí se conectará la API en el próximo módulo
+  }
+}
