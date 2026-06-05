@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
+  password: process.env.DB_PASSWORD !== undefined ? process.env.DB_PASSWORD : '',
   database: process.env.DB_NAME || 'buki_booking_db',
   waitForConnections: true,
   connectionLimit: 10,
@@ -19,7 +19,7 @@ const testConnection = async () => {
     connection.release();
     console.log('MySQL conectado correctamente');
   } catch (error) {
-    console.error('Error al conectar con MySQL:', error.message);
+    console.error('Error al conectar con MySQL. Revisa usuario, contraseña, puerto y base de datos en backend/.env');
   }
 };
 

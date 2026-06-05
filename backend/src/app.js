@@ -3,6 +3,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const healthRoutes = require('./routes/health.routes');
+const serviceRoutes = require('./routes/service.routes');
+const bookingRoutes = require('./routes/booking.routes');
 const { testConnection } = require('./config/db');
 
 const app = express();
@@ -13,6 +15,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api', healthRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
