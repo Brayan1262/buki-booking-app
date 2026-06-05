@@ -3,3 +3,27 @@
   border-width: 2px !important;
   border-color: var(--buki-lilac) !important;
 }
+
+.bg-buki-success {
+  background-color: var(--buki-success) !important;
+}
+
+.bg-buki-error {
+  background-color: var(--buki-error) !important;
+}
+
+/* Scrollbar para la lista de servicios */
+.service-list::-webkit-scrollbar {
+  width: 6px;
+}
+.service-list::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px;
+}
+.service-list::-webkit-scrollbar-thumb {
+  background: var(--buki-lilac); 
+  border-radius: 10px;
+}
+.service-list::-webkit-scrollbar-thumb:hover {
+  background: var(--buki-purple); 
+}
