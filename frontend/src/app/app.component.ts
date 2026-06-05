@@ -25,6 +25,20 @@ export class AppComponent implements OnInit {
   serviceErrorMessage = '';
   loadingServices = false;
   savingService = false;
+
+  // Reservas
+  bookings: any[] = [];
+  bookingForm = {
+    client_name: '',
+    client_email: '',
+    service_id: '',
+    booking_date: '',
+    booking_time: ''
+  };
+  bookingSuccessMessage = '';
+  bookingErrorMessage = '';
+  loadingBookings = false;
+  savingBooking = false;
   
   // API Status (Para el dashboard)
   apiStatus = 'Pendiente de conexión';
@@ -34,6 +48,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.checkApiStatus();
     this.loadServices();
+    this.loadBookings();
   }
 
   checkApiStatus() {
@@ -42,6 +57,8 @@ export class AppComponent implements OnInit {
       error: () => this.apiStatus = 'Desconectado'
     });
   }
+
+  // ---- Lógica de Servicios ----
 
   loadServices() {
     this.loadingServices = true;
@@ -110,6 +127,93 @@ export class AppComponent implements OnInit {
       description: '',
       price: null,
       duration: null
+    };
+  }
+
+  // ---- Lógica de Reservas ----
+
+  loadBookings() {
+    this.loadingBookings = true;
+    this.bukiApi.getBookings().subscribe({
+      next: (data) => {
+        this.bookings = data;
+        this.loadingBookings = false;
+      },
+      error: (err) => {
+        console.error('Error cargando reservas:', err);
+        this.bookingErrorMessage = 'No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose en http://localhost:3000.';
+        this.loadingBookings = false;
+      }
+    });
+  }
+
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  validateBookingForm(): boolean {
+    this.bookingErrorMessage = '';
+    this.bookingSuccessMessage = '';
+    
+    if (!this.bookingForm.client_name || this.bookingForm.client_name.trim() === '') {
+      this.bookingErrorMessage = 'El nombre del cliente es obligatorio.';
+      return false;
+    }
+    
+    if (!this.bookingForm.client_email || !this.isValidEmail(this.bookingForm.client_email)) {
+      this.bookingErrorMessage = 'El correo del cliente no es válido.';
+      return false;
+    }
+
+    if (!this.bookingForm.service_id) {
+      this.bookingErrorMessage = 'Debe seleccionar un servicio.';
+      return false;
+    }
+    
+    if (!this.bookingForm.booking_date) {
+      this.bookingErrorMessage = 'La fecha de reserva es obligatoria.';
+      return false;
+    }
+
+    if (!this.bookingForm.booking_time) {
+      this.bookingErrorMessage = 'La hora de reserva es obligatoria.';
+      return false;
+    }
+    
+    return true;
+  }
+
+  createBooking() {
+    if (!this.validateBookingForm()) {
+      return;
+    }
+    
+    this.savingBooking = true;
+    this.bukiApi.createBooking(this.bookingForm).subscribe({
+      next: (res) => {
+        this.bookingSuccessMessage = 'Reserva registrada correctamente.';
+        this.resetBookingForm();
+        this.loadBookings();
+        this.savingBooking = false;
+        
+        setTimeout(() => this.bookingSuccessMessage = '', 5000);
+      },
+      error: (err) => {
+        console.error('Error creando reserva:', err);
+        this.bookingErrorMessage = err.error?.message || 'Error al crear la reserva.';
+        this.savingBooking = false;
+      }
+    });
+  }
+
+  resetBookingForm() {
+    this.bookingForm = {
+      client_name: '',
+      client_email: '',
+      service_id: '',
+      booking_date: '',
+      booking_time: ''
     };
   }
 }

@@ -12,18 +12,22 @@
   background-color: var(--buki-error) !important;
 }
 
-/* Scrollbar para la lista de servicios */
-.service-list::-webkit-scrollbar {
+/* Scrollbar para la lista de servicios y reservas */
+.service-list::-webkit-scrollbar,
+.booking-list::-webkit-scrollbar {
   width: 6px;
 }
-.service-list::-webkit-scrollbar-track {
+.service-list::-webkit-scrollbar-track,
+.booking-list::-webkit-scrollbar-track {
   background: #f1f1f1; 
   border-radius: 10px;
 }
-.service-list::-webkit-scrollbar-thumb {
+.service-list::-webkit-scrollbar-thumb,
+.booking-list::-webkit-scrollbar-thumb {
   background: var(--buki-lilac); 
   border-radius: 10px;
 }
-.service-list::-webkit-scrollbar-thumb:hover {
+.service-list::-webkit-scrollbar-thumb:hover,
+.booking-list::-webkit-scrollbar-thumb:hover {
   background: var(--buki-purple); 
 }

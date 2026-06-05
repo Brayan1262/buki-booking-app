@@ -91,7 +91,7 @@
           </div>
           <div>
             <h6 class="card-subtitle text-muted fw-medium mb-1">Reservas registradas</h6>
-            <h2 class="card-title mb-0 fw-bold text-buki-dark">0</h2>
+            <h2 class="card-title mb-0 fw-bold text-buki-dark">{{ bookings.length }}</h2>
           </div>
         </div>
       </div>
@@ -205,18 +205,109 @@
     <div class="col-lg-6">
       <div class="card shadow-soft border-0 rounded-4 h-100">
         <div class="card-header bg-white border-bottom-0 p-4 pb-0">
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center mb-3">
             <div class="bg-buki-bg rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-              <i class="bi bi-calendar-plus fs-5 text-buki-lilac"></i>
+              <i class="bi bi-calendar-plus fs-5 text-buki-purple"></i>
             </div>
             <h4 class="mb-0 fw-bold text-buki-dark">Reservas</h4>
           </div>
-          <p class="text-muted mt-3 mb-0">Crea reservas asociando cliente, correo, servicio, fecha y hora.</p>
         </div>
-        <div class="card-body p-4 text-center">
-          <div class="bg-buki-bg rounded-4 py-5 border-dashed">
-            <i class="bi bi-magic text-buki-lilac opacity-50 mb-3 d-block" style="font-size: 3rem;"></i>
-            <p class="text-secondary fw-medium px-4">El formulario y listado de reservas se conectarán en el siguiente módulo.</p>
+        <div class="card-body p-4 pt-0">
+          
+          <!-- Alertas -->
+          <div *ngIf="bookingSuccessMessage" class="alert alert-success border-0 bg-buki-success text-white rounded-3 shadow-sm py-2 px-3 d-flex align-items-center mb-4">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ bookingSuccessMessage }}
+          </div>
+          <div *ngIf="bookingErrorMessage" class="alert alert-danger border-0 bg-buki-error text-white rounded-3 shadow-sm py-2 px-3 d-flex align-items-center mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ bookingErrorMessage }}
+          </div>
+
+          <!-- Formulario -->
+          <div class="bg-buki-bg rounded-4 p-4 mb-4">
+            <h6 class="fw-bold text-buki-dark mb-3">Registrar nueva reserva</h6>
+            <form (ngSubmit)="createBooking()">
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <label class="form-label small fw-medium text-muted">Nombre del cliente</label>
+                  <input type="text" class="form-control rounded-3 border-0 shadow-sm px-3 py-2" [(ngModel)]="bookingForm.client_name" name="client_name" placeholder="Ej. María Pérez">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small fw-medium text-muted">Correo electrónico</label>
+                  <input type="email" class="form-control rounded-3 border-0 shadow-sm px-3 py-2" [(ngModel)]="bookingForm.client_email" name="client_email" placeholder="maria@email.com">
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label small fw-medium text-muted">Servicio a reservar</label>
+                <select class="form-select rounded-3 border-0 shadow-sm px-3 py-2 text-muted" [(ngModel)]="bookingForm.service_id" name="service_id">
+                  <option value="" disabled selected>Seleccione un servicio...</option>
+                  <option *ngFor="let s of services" [value]="s.id">{{ s.name }} ({{ s.duration }} min - ${{ s.price }})</option>
+                </select>
+              </div>
+
+              <div class="row g-3 mb-4">
+                <div class="col-6">
+                  <label class="form-label small fw-medium text-muted">Fecha de reserva</label>
+                  <input type="date" class="form-control rounded-3 border-0 shadow-sm px-3 py-2 text-muted" [(ngModel)]="bookingForm.booking_date" name="booking_date">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small fw-medium text-muted">Hora de reserva</label>
+                  <input type="time" class="form-control rounded-3 border-0 shadow-sm px-3 py-2 text-muted" [(ngModel)]="bookingForm.booking_time" name="booking_time">
+                </div>
+              </div>
+              <button type="submit" class="btn bg-buki-purple text-white w-100 rounded-3 shadow-sm py-2 fw-medium" [disabled]="savingBooking">
+                <span *ngIf="savingBooking" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!savingBooking" class="bi bi-calendar-check me-2"></i>Guardar reserva
+              </button>
+            </form>
+          </div>
+
+          <!-- Listado -->
+          <h6 class="fw-bold text-buki-dark mb-3">Reservas registradas</h6>
+          
+          <div *ngIf="loadingBookings" class="text-center py-4">
+            <div class="spinner-border text-buki-lilac" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+          <div *ngIf="!loadingBookings && bookings.length === 0" class="text-center py-4 bg-light rounded-4 border-dashed">
+            <i class="bi bi-calendar-x text-muted opacity-50 mb-2 d-block fs-1"></i>
+            <p class="text-secondary small mb-0">No hay reservas registradas todavía.</p>
+          </div>
+
+          <div *ngIf="!loadingBookings && bookings.length > 0" class="booking-list" style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+            <div *ngFor="let b of bookings" class="card border-0 bg-white shadow-sm rounded-3 mb-3 border-start border-4 border-buki-purple">
+              <div class="card-body p-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <div>
+                    <h6 class="mb-0 fw-bold text-buki-dark">{{ b.client_name }}</h6>
+                    <small class="text-muted d-block">{{ b.client_email }}</small>
+                  </div>
+                  <span class="badge" [ngClass]="b.status === 'confirmed' ? 'bg-success bg-opacity-25 text-success' : 'bg-warning bg-opacity-25 text-warning'">
+                    {{ b.status === 'confirmed' ? 'Confirmada' : b.status }}
+                  </span>
+                </div>
+                
+                <div class="bg-buki-bg rounded-3 p-2 mb-2 d-flex align-items-center">
+                  <div class="bg-buki-lilac rounded-circle p-1 me-2 d-flex justify-content-center align-items-center" style="width: 24px; height: 24px;">
+                    <i class="bi bi-scissors text-white" style="font-size: 0.7rem;"></i>
+                  </div>
+                  <div class="flex-grow-1">
+                    <p class="mb-0 small fw-bold text-buki-dark lh-sm">{{ b.service_name }}</p>
+                    <small class="text-muted" style="font-size: 0.7rem;">${{ b.service_price }} • {{ b.service_duration }} min</small>
+                  </div>
+                </div>
+
+                <div class="d-flex align-items-center small text-buki-purple bg-light rounded-2 py-1 px-2">
+                  <i class="bi bi-calendar-event me-2"></i> 
+                  <span class="fw-bold">{{ b.booking_date | date:'dd/MM/yyyy' }}</span>
+                  <span class="mx-2 text-muted">•</span>
+                  <i class="bi bi-clock me-2"></i> 
+                  <span class="fw-bold">{{ b.booking_time }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
